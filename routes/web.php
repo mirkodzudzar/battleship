@@ -8,4 +8,5 @@ Route::get('/', function () {
     return Inertia::render('Board');
 });
 
+Route::get('/game/{game:uuid}', [GameController::class, 'show'])->name('game.show');
 Route::post('/game', [GameController::class, 'store'])->name('game.store');
