@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\GameStatus;
 use App\Models\Game;
 use Inertia\Inertia;
+use App\GameUserStatus;
 use App\Actions\CreateGame;
-use App\GameStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -47,6 +48,10 @@ class GameController extends Controller
     public function cancel(Game $game)
     {
         $game->update(['status' => GameStatus::CANCELED]);
+
+        $game->users->each(function ($gameUser) {
+            $gameUser->update(['status' => GameUserStatus::FINISHED]);
+        });
 
         return redirect()->route('game.board.index');
     }

@@ -8,10 +8,10 @@ import MainLayout from "./Layouts/MainLayout.vue";
 import { ZiggyVue } from "ziggy-js";
 
 function getOrCreateGuestToken() {
-    let token = sessionStorage.getItem("guest_token");
+    let token = localStorage.getItem("guest_token");
     if (!token) {
         token = "guest_" + crypto.randomUUID();
-        sessionStorage.setItem("guest_token", token);
+        localStorage.setItem("guest_token", token);
     }
     return token;
 }
