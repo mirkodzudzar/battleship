@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Actions\CreateGame;
+use App\GameStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
@@ -14,14 +15,17 @@ class GameController extends Controller
     {
         $guestToken = session('guest_token');
 
-        $yourGrid = $game->boards()
+        $grid = $game->boards()
             ->select(['x_value as x', 'y_value as y'])
             ->where('guest_token', $guestToken)
             ->get()
             ->map(fn($board) => ['x' => $board->x, 'y' => $board->y])
             ->toArray();
 
-        return Inertia::render('Game', ['yourGrid' => $yourGrid ?: []]);
+        return Inertia::render('Game', [
+            'gameUuid' => $game->uuid,
+            'grid' => $grid
+        ]);
     }
 
     public function store(Request $request, CreateGame $creator): RedirectResponse
@@ -38,5 +42,12 @@ class GameController extends Controller
         session(['guest_token' => $validated['token']]);
 
         return redirect()->route('game.show', ['game' => $game->uuid]);
+    }
+
+    public function cancel(Game $game)
+    {
+        $game->update(['status' => GameStatus::CANCELED]);
+
+        return redirect()->route('game.board.index');
     }
 }
