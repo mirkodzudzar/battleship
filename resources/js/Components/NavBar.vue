@@ -4,7 +4,7 @@
         <div class="text-xl font-bold">Battleship</div>
         <ul class="flex space-x-4">
           <li><Link :href="route('home')">Home</Link></li>
-          <li><Link :href="route('game.board.index')">Play Battleship</Link></li>
+          <li><Link :href="route('games.boards.index')">Play Battleship</Link></li>
         </ul>
       </nav>
     </header>

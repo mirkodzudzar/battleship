@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 
-class GameBoardController extends Controller
+class GameBoardsController extends Controller
 {
     public function index()
     {

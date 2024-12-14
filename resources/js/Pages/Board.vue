@@ -50,7 +50,7 @@
   </MainLayout>
 </template>
 
-  <script setup>
+<script setup>
 import { ref } from "vue";
 import { router } from "@inertiajs/vue3";
 
@@ -78,7 +78,7 @@ function startGame() {
     token: window.guestToken,
   };
 
-  router.post(route("game.store"), payload, {
+  router.post(route("games.store"), payload, {
     onError: (errors) => {
       console.error("Error starting game:", errors);
     },

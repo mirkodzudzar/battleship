@@ -1,14 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\GameController;
-use App\Http\Controllers\GameBoardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GamesController;
+use App\Http\Controllers\GameMovesController;
+use App\Http\Controllers\GameBoardsController;
 
 Route::get('/', HomeController::class)->name("home");
 
-Route::get('/game/board', [GameBoardController::class, 'index'])->name('game.board.index');
+Route::get('/games/boards', [GameBoardsController::class, 'index'])->name('games.boards.index');
 
-Route::get('game/{game:uuid}', [GameController::class, 'show'])->name('game.show');
-Route::post('game', [GameController::class, 'store'])->name('game.store');
-Route::post('game/{game:uuid}/cancel', [GameController::class, 'cancel'])->name('game.cancel');
+Route::get('games/{game:uuid}', [GamesController::class, 'show'])->name('games.show');
+Route::post('games', [GamesController::class, 'store'])->name('games.store');
+Route::post('games/{game:uuid}/cancel', [GamesController::class, 'cancel'])->name('games.cancel');
+
+Route::post('games/{game:uuid}/moves', [GameMovesController::class, 'store'])->name('games.moves.store');
