@@ -59,17 +59,21 @@ import axios from "axios";
 const { props } = usePage();
 const grid = computed(() => props.grid || []);
 const gameUuid = computed(() => props.gameUuid);
+const statuses = computed(() => props.statuses);
 
 const clickedCells = ref({});
 
 function getCellClass(row, column) {
   const key = `${row}-${column}`;
-  if (clickedCells.value[key] === "correct") {
-    return "bg-green-500";
-  } else if (clickedCells.value[key] === "incorrect") {
-    return "bg-red-500";
+  const baseClass = "hover:cursor-default";
+
+  if (clickedCells.value[key] === statuses.value.correct) {
+    return `${baseClass} bg-green-300`;
+  } else if (clickedCells.value[key] === statuses.value.incorrect) {
+    return `${baseClass} bg-red-300`;
   }
-  return "bg-indigo-100 hover:bg-indigo-300";
+
+  return `bg-indigo-100 hover:bg-indigo-300`;
 }
 
 async function checkCell(row, column) {
@@ -80,7 +84,7 @@ async function checkCell(row, column) {
     const response = await axios.post(
       route("games.moves.store", { uuid: gameUuid.value }),
       {
-        move: {
+        moves: {
           x: column,
           y: row,
         },

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\GameStatus;
 use App\Models\Game;
 use Inertia\Inertia;
+use App\GameMoveStatus;
 use App\GameUserStatus;
 use App\Actions\CreateGame;
 use Illuminate\Http\Request;
@@ -25,7 +26,11 @@ class GamesController extends Controller
 
         return Inertia::render('Game', [
             'gameUuid' => $game->uuid,
-            'grid' => $grid
+            'grid' => $grid,
+            'statuses' => [
+                'correct' => GameMoveStatus::CORRECT->value,
+                'incorrect' => GameMoveStatus::INCORRECT->value,
+            ],
         ]);
     }
 
