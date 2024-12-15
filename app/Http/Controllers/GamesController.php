@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use App\GameStatus;
 use App\Models\Game;
 use Inertia\Inertia;
+use App\GameMoveStatus;
 use App\GameUserStatus;
 use App\Actions\CreateGame;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
-class GameController extends Controller
+class GamesController extends Controller
 {
     public function show(Game $game)
     {
@@ -25,7 +26,11 @@ class GameController extends Controller
 
         return Inertia::render('Game', [
             'gameUuid' => $game->uuid,
-            'grid' => $grid
+            'grid' => $grid,
+            'statuses' => [
+                'correct' => GameMoveStatus::CORRECT->value,
+                'incorrect' => GameMoveStatus::INCORRECT->value,
+            ],
         ]);
     }
 
@@ -42,7 +47,7 @@ class GameController extends Controller
 
         session(['guest_token' => $validated['token']]);
 
-        return redirect()->route('game.show', ['game' => $game->uuid]);
+        return redirect()->route('games.show', ['game' => $game->uuid]);
     }
 
     public function cancel(Game $game)
@@ -53,6 +58,6 @@ class GameController extends Controller
             $gameUser->update(['status' => GameUserStatus::FINISHED]);
         });
 
-        return redirect()->route('game.board.index');
+        return redirect()->route('games.boards.index');
     }
 }
