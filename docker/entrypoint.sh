@@ -19,22 +19,14 @@ role=${CONTAINER_ROLE:-app}
 
 if [ "$role" = "app" ]; then
     # Application server tasks
-    php artisan migrate --force
+    php artisan migrate
     php artisan key:generate
     php artisan cache:clear
     php artisan config:clear
     php artisan route:clear
     php artisan serve --port=$PORT --host=0.0.0.0 --env=.env
-    exec docker-php-entrypoint
+    exec docker-php-entrypoint "$@"
 elif [ "$role" = "queue" ]; then
-    # Queue worker tasks
-    echo "Waiting for the database to be available..."
-    # Use -z for zero-IO mode, -v for verbose, -w for timeout
-    until nc -z -v -w30 database 3306; do
-        echo "Waiting for MySQL to be available..."
-        sleep 5
-    done
-
-    echo "Database is up. Running the queue..."
-    php artisan queue:work --verbose --tries=3 --timeout=90
+    echo "Running the queue ... "
+    php artisan queue:work --verbose --tries=3 --timeout=180
 fi

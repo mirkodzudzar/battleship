@@ -1,7 +1,7 @@
 FROM php:8.3 AS php
 
 RUN apt-get update -y
-RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev netcat-traditional
+RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
 RUN docker-php-ext-install pdo pdo_mysql bcmath
 
 RUN pecl install -o -f redis \
@@ -18,7 +18,7 @@ ENTRYPOINT [ "docker/entrypoint.sh" ]
 
 # ================================================================
 # node
-FROM node:22-alpine AS node
+FROM node:20-alpine AS node
 
 WORKDIR /var/www
 COPY . .
