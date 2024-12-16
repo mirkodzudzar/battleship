@@ -54,6 +54,22 @@ services:
         depends_on:
             - redis
 
+    reverb:
+        build:
+            context: .
+            target: php
+        environment:
+            - APP_ENV=${APP_ENV}
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        ports:
+            - 8080:8080
+        depends_on:
+            - database
+            - redis
+            - php
+
     # Node Server
     node:
         build:

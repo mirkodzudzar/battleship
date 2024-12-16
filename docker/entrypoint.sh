@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e  # Exit immediately if a command exits with a non-zero status
+set -e # Exit immediately if a command exits with a non-zero status
 
 # Composer install
 if [ ! -f "vendor/autoload.php" ]; then
@@ -29,4 +29,7 @@ if [ "$role" = "app" ]; then
 elif [ "$role" = "queue" ]; then
     echo "Running the queue ... "
     php artisan queue:work --verbose --tries=3 --timeout=180
+elif [ "$role" = "reverb" ]; then
+    echo "Database is up. Running the reverb..."
+    php artisan reverb:start
 fi
