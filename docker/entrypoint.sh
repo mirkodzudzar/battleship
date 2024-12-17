@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e # Exit immediately if a command exits with a non-zero status
 
+# Wait for database
+echo "Waiting for the database to be available..."
+until nc -z -v -w30 database 3306; do
+    echo "Waiting for MySQL to be available..."
+    sleep 5
+done
+
 # Composer install
 if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction

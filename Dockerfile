@@ -1,12 +1,16 @@
 FROM php:8.3 AS php
 
-RUN apt-get update -y
-RUN apt-get install -y unzip libpq-dev libcurl4-gnutls-dev
-RUN docker-php-ext-install pdo pdo_mysql bcmath
-
-RUN pecl install -o -f redis \
-    && rm -rf /tmp/pear \
-    && docker-php-ext-enable redis
+# Install required dependencies and PHP extensions
+RUN apt-get update -y \
+    && apt-get install -y --no-install-recommends unzip libpq-dev libcurl4-gnutls-dev netcat-traditional \
+    && apt-get install -y --no-install-recommends libedit-dev libreadline-dev \
+    && docker-php-ext-install pdo pdo_mysql bcmath \
+    && pecl install -o -f redis \
+    && docker-php-ext-enable redis \
+    && docker-php-source extract \
+    && docker-php-ext-install pcntl \
+    && docker-php-source delete \
+    && rm -rf /var/lib/apt/lists/* /tmp/pear
 
 WORKDIR /var/www
 COPY . .
