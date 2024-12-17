@@ -54,6 +54,7 @@ services:
         depends_on:
             - redis
 
+    # Reverb Broadcast
     reverb:
         build:
             context: .
